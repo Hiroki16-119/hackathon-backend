@@ -1,0 +1,38 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+env/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Database
+*.sqlite3
+*.db
+
+# Machine Learning model files
+*.pt
+*.pth
+*.h5
+*.pkl
+*.joblib
+
+# Environment files
+*.env
+
+# Docker overrides
+docker-compose.override.yml
