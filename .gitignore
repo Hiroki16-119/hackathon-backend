@@ -7,9 +7,9 @@ venv/
 env/
 
 # Jupyter Notebook checkpoints
-.ipynb_checkpoints
+.ipynb_checkpoints/
 
-# IDE / Editor
+# IDE / Editor settings
 .vscode/
 .idea/
 
@@ -20,7 +20,7 @@ env/
 .DS_Store
 Thumbs.db
 
-# Database
+# Database files
 *.sqlite3
 *.db
 
@@ -32,7 +32,14 @@ Thumbs.db
 *.joblib
 
 # Environment files
-*.env
+.env
+.env.*
 
-# Docker overrides
+# Docker
 docker-compose.override.yml
+
+# Temporary or cache files
+*.tmp
+*.bak
+*.swp
+.cache/
