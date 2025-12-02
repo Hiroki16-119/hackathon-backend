@@ -1,9 +1,9 @@
+from dotenv import load_dotenv
+load_dotenv()  # ← 先に読み込む
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
 from app.routes import products, openai_description
-
-load_dotenv()
 
 app = FastAPI()
 
