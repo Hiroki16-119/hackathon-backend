@@ -7,7 +7,7 @@ def generate_description_text(name: str, user_hint: str = None):
     system_prompt = (
         "あなたはフリマアプリの出品者をサポートするマーケティング担当者です。"
         "購入者の興味を引きつけ、信頼感を与える魅力的で簡潔な紹介文を作成してください。"
-        "文体は丁寧で自然な日本語にしてください。"
+        "文章は丁寧で自然な日本語にしてください。"
     )
 
     if user_hint:
