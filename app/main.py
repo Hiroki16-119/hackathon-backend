@@ -4,6 +4,7 @@ load_dotenv()  # ← 先に読み込む
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import products, openai_description
+from app.routes import users, auth  # 追加
 
 app = FastAPI()
 
@@ -19,6 +20,8 @@ app.add_middleware(
 # ✅ ルート登録
 app.include_router(products.router)
 app.include_router(openai_description.router)
+app.include_router(users.router)   # 追加
+app.include_router(auth.router)    # 追加
 
 @app.get("/")
 def root():
