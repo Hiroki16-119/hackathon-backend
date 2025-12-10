@@ -11,7 +11,10 @@ app = FastAPI()
 # ✅ CORS設定
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+        "https://hackathon-frontend-delta-lilac.vercel.app"  # ← 追加
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
