@@ -6,3 +6,4 @@ sqlalchemy>=1.4
 pymysql>=1.0.2
 python-dotenv>=1.0.0
 cryptography
+firebase-admin

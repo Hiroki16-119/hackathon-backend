@@ -14,6 +14,7 @@ from app.dao.product_dao import (
 from app.dao.db import get_db
 from app.dao.purchase_table import PurchaseTable
 from app.dao.user_dao import get_user_by_id
+from app.utils.firebase_auth import verify_firebase_token
 
 router = APIRouter(prefix="/products", tags=["Products"])
 
@@ -31,7 +32,23 @@ def get_product(product_id: str, db: Session = Depends(get_db)):
     return product
 
 @router.post("", response_model=ProductRead)
-def add_product(product: ProductCreate, db: Session = Depends(get_db)):
+def add_product(product: ProductCreate, db: Session = Depends(get_db), authorization: str = Header(...)):
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="認証情報がありません")
+    token = authorization.split()[1]
+    decoded = verify_firebase_token(token)
+    user_id = decoded["uid"]
+
+    user = get_user_by_id(db, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="ユーザーが見つかりません")
+
+    # ProductCreateにseller_idとseller_nameをセット
+    product_data = product.dict()
+    product_data["seller_id"] = user_id
+    product_data["seller_name"] = user.name
+    product = ProductCreate(**product_data)
+
     return create_product(db, product)
 
 @router.patch("/{product_id}", response_model=ProductRead)
@@ -53,12 +70,13 @@ def remove_product(product_id: str, db: Session = Depends(get_db)):
 def purchase_product(
     product_id: str,
     db: Session = Depends(get_db),
-    authorization: str = Header(None)
+    authorization: str = Header(...)
 ):
-    
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="認証情報がありません")
-    user_id = authorization.split()[1]
+    token = authorization.split()[1]
+    decoded = verify_firebase_token(token)
+    user_id = decoded["uid"]
 
 
     product = get_product_by_id(db, product_id)
@@ -84,14 +102,3 @@ def purchase_product(
     return {"detail": "購入が完了しました"}
 
 
-@router.get("/{user_id}/purchases", response_model=List[ProductRead])
-def get_user_purchases(user_id: str, db: Session = Depends(get_db)):
-    # 購入履歴を取得
-    purchases = db.query(PurchaseTable).filter(PurchaseTable.user_id == user_id).all()
-    # 購入した商品の詳細を取得
-    products = []
-    for purchase in purchases:
-        product = get_product_by_id(db, purchase.product_id)
-        if product:
-            products.append(product)
-    return products
