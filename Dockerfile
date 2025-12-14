@@ -2,10 +2,15 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
+# 依存パッケージをインストール
+RUN apt-get update && apt-get install -y build-essential libssl-dev
+
 COPY requirements.txt .
+
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
+COPY serviceAccountKey.json .
 
 EXPOSE 8080
 
