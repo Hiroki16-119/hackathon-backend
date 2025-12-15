@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field
 class ProductBase(BaseModel):
     name: str
     price: int
+    category: str
     description: Optional[str] = None
     image_url: Optional[str] = Field(None, alias="imageUrl")
     user_hint: Optional[str] = None

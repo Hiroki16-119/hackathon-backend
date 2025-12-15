@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import products, openai_description
 from app.routes import users, auth  # 追加
+from app.routes import predict
 
 app = FastAPI()
 
@@ -25,6 +26,7 @@ app.include_router(products.router)
 app.include_router(openai_description.router)
 app.include_router(users.router)   # 追加
 app.include_router(auth.router)    # 追加
+app.include_router(predict.router)
 
 @app.get("/")
 def root():
