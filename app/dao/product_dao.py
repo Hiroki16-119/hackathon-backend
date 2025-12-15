@@ -19,6 +19,7 @@ def create_product(db: Session, product: ProductCreate):
         id=str(uuid4()),
         name=product.name,
         price=product.price,
+        category=product.category,
         description=product.description,
         image_url=image,
         user_hint=product.user_hint,

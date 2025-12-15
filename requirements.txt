@@ -7,3 +7,8 @@ pymysql>=1.0.2
 python-dotenv>=1.0.0
 cryptography
 firebase-admin
+torch
+joblib
+numpy
+scikit-learn
+pandas
