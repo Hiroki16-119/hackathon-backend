@@ -58,7 +58,7 @@ def get_user_purchases(user_id: str, db: Session = Depends(get_db)):
             products.append(product)
     return products
 
-@router.post("/", response_model=UserRead)
+@router.post("", response_model=UserRead)
 def create_user_api(
     payload: dict,
     db: Session = Depends(get_db),
