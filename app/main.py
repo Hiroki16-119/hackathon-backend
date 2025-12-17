@@ -7,12 +7,9 @@ from app.routes import products, openai_description
 from app.routes import users, auth  # 追加
 from app.routes import predict
 from fastapi.staticfiles import StaticFiles
-from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
+from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-import shutil
-import os
+
 
 app = FastAPI()
 
@@ -21,7 +18,9 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
-        "https://hackathon-frontend-delta-lilac.vercel.app"  # ← 追加
+        "https://hackathon-frontend-delta-lilac.vercel.app",
+        "https://hackathon-frontend-git-main-hiroki16-119s-projects.vercel.app",
+        "https://hackathon-frontend-a94mh59lr-hiroki16-119s-projects.vercel.app"  # ← 追加
     ],
     allow_credentials=True,
     allow_methods=["*"],
