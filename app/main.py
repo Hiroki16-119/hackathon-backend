@@ -6,6 +6,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routes import products, openai_description
 from app.routes import users, auth  # 追加
 from app.routes import predict
+from fastapi.staticfiles import StaticFiles
+from fastapi import FastAPI, File, UploadFile
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
+import shutil
+import os
 
 app = FastAPI()
 
@@ -20,6 +27,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ここで "static" ディレクトリを "/static" パスにマウント
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # ✅ ルート登録
 app.include_router(products.router)
