@@ -45,3 +45,6 @@ docker-compose.override.yml
 .cache/
 
 serviceAccountKey.json
+
+static/images/*
+!static/images/.gitkeep
