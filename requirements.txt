@@ -10,6 +10,4 @@ firebase-admin
 torch
 joblib
 numpy
-scikit-learn
-pandas
 python-multipart
