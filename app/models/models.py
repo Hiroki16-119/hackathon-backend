@@ -31,9 +31,9 @@ class ProductUpdate(BaseModel):
     user_hint: Optional[str] = None
     is_purchased: Optional[bool] = None  # ← 追加
 
-    class Config:
-        allow_population_by_field_name = True
-        orm_mode = True
+class Config:
+    validate_by_name = True
+    from_attributes = True
 
 class UserRead(BaseModel):
     id: str
