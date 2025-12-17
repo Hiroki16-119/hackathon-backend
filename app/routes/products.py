@@ -1,9 +1,11 @@
-from fastapi import APIRouter, HTTPException, Depends, Header
+from fastapi import APIRouter, HTTPException, Depends, Header, UploadFile, File, Form
 from typing import List
 from sqlalchemy.orm import Session
 from uuid import uuid4
+import os
+import shutil
 
-from app.models.models import ProductCreate, ProductRead, ProductUpdate
+from app.models.models import ProductRead, ProductUpdate
 from app.dao.product_dao import (
     get_all_products,
     get_product_by_id,
@@ -32,7 +34,17 @@ def get_product(product_id: str, db: Session = Depends(get_db)):
     return product
 
 @router.post("", response_model=ProductRead)
-def add_product(product: ProductCreate, db: Session = Depends(get_db), authorization: str = Header(...)):
+async def add_product(
+    name: str = Form(...),
+    price: int = Form(...),
+    category: str = Form(...),
+    description: str = Form(""),
+    image: UploadFile = File(None),
+    imageUrl: str = Form(""),
+    user_hint: str = Form(""),
+    db: Session = Depends(get_db),
+    authorization: str = Header(...)
+):
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="認証情報がありません")
     token = authorization.split()[1]
@@ -43,12 +55,30 @@ def add_product(product: ProductCreate, db: Session = Depends(get_db), authoriza
     if not user:
         raise HTTPException(status_code=404, detail="ユーザーが見つかりません")
 
-    # ProductCreateにseller_idとseller_nameをセット
-    product_data = product.dict()
-    product_data["seller_id"] = user_id
-    product_data["seller_name"] = user.name
-    product = ProductCreate(**product_data)
+    # 画像ファイルがあれば保存し、そのパスをimage_urlに
+    image_url = imageUrl
+    if image:
+        ext = os.path.splitext(image.filename)[1]
+        img_id = str(uuid4())
+        save_path = f"static/images/{img_id}{ext}"
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        with open(save_path, "wb") as buffer:
+            shutil.copyfileobj(image.file, buffer)
+        image_url = f"/{save_path}"
 
+    # DB保存
+    from app.models.models import ProductCreate
+    product_data = {
+        "name": name,
+        "price": price,
+        "category": category,
+        "description": description,
+        "image_url": image_url,
+        "user_hint": user_hint,
+        "seller_id": user_id,
+        "seller_name": user.name,
+    }
+    product = ProductCreate(**product_data)
     return create_product(db, product)
 
 @router.patch("/{product_id}", response_model=ProductRead)
@@ -77,7 +107,6 @@ def purchase_product(
     token = authorization.split()[1]
     decoded = verify_firebase_token(token)
     user_id = decoded["uid"]
-
 
     product = get_product_by_id(db, product_id)
     if not product:

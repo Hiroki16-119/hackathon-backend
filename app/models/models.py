@@ -14,8 +14,8 @@ class ProductBase(BaseModel):
     is_purchased: bool = False  # ← 追加
 
     class Config:
-        allow_population_by_field_name = True
-        orm_mode = True
+        validate_by_name = True
+        from_attributes = True
 
 class ProductCreate(ProductBase):
     pass
