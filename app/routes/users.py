@@ -71,6 +71,8 @@ def create_user_api(
     uid = decoded["uid"]
     email = decoded.get("email")
     name = payload.get("displayName") or decoded.get("name")
+    if not name:
+        raise HTTPException(status_code=400, detail="ユーザー名が必要です")
     user = get_user_by_id(db, uid)
     if user:
         return user
