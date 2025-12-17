@@ -25,11 +25,11 @@ Thumbs.db
 *.db
 
 # Machine Learning model files
-*.pt
+#*.pt
 *.pth
 *.h5
-*.pkl
-*.joblib
+#*.pkl
+#*.joblib
 
 # Environment files
 .env

@@ -11,3 +11,4 @@ torch
 joblib
 numpy
 python-multipart
+scikit-learn
