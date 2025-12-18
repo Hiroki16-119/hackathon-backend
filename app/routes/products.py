@@ -17,6 +17,7 @@ from app.dao.db import get_db
 from app.dao.purchase_table import PurchaseTable
 from app.dao.user_dao import get_user_by_id
 from app.utils.firebase_auth import verify_firebase_token
+from app.utils.gcs import upload_image_to_gcs  # 追加
 
 router = APIRouter(prefix="/products", tags=["Products"])
 
@@ -55,16 +56,13 @@ async def add_product(
     if not user:
         raise HTTPException(status_code=404, detail="ユーザーが見つかりません")
 
-    # 画像ファイルがあれば保存し、そのパスをimage_urlに
+    # 画像ファイルがあればGCSにアップロードし、そのURLをimage_urlに
     image_url = imageUrl
     if image:
         ext = os.path.splitext(image.filename)[1]
         img_id = str(uuid4())
-        save_path = f"static/images/{img_id}{ext}"
-        os.makedirs(os.path.dirname(save_path), exist_ok=True)
-        with open(save_path, "wb") as buffer:
-            shutil.copyfileobj(image.file, buffer)
-        image_url = f"/{save_path}"
+        filename = f"products/{img_id}{ext}"
+        image_url = upload_image_to_gcs(image.file, filename)  # GCSアップロード
 
     # DB保存
     from app.models.models import ProductCreate
