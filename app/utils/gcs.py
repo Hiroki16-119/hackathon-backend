@@ -41,8 +41,7 @@ def generate_upload_url(filename: str):
         service_account_email=service_account_email,
     )
     
-    # 公開用URL（アップロード後にこのURLで画像にアクセス可能）
-    # 7日間有効な署名付き読み取りURL
+    # 公開用URL（7日間有効な署名付き読み取りURL）
     read_url = blob.generate_signed_url(
         version="v4",
         expiration=datetime.now(timezone.utc) + timedelta(days=7),
