@@ -48,3 +48,6 @@ serviceAccountKey.json
 
 static/images/*
 !static/images/.gitkeep
+
+*.json
+term8-hiroki-yamada-714c8f07e9be.json

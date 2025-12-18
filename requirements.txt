@@ -12,3 +12,4 @@ joblib
 numpy
 python-multipart
 scikit-learn
+google-cloud-storage
