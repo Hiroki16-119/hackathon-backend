@@ -28,6 +28,9 @@ services:
       - .env
     volumes:
       - .:/app
+      - ./term8-hiroki-yamada-714c8f07e9be.json:/app/term8-hiroki-yamada-714c8f07e9be.json:ro
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/term8-hiroki-yamada-714c8f07e9be.json
     command: uvicorn app.main:app --host 0.0.0.0 --port 8080
 
 volumes:
