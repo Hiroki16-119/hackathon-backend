@@ -1,9 +1,7 @@
-from fastapi import APIRouter, HTTPException, Depends, Header, UploadFile, File, Form
+from fastapi import APIRouter, HTTPException, Depends, Header, Form
 from typing import List
 from sqlalchemy.orm import Session
 from uuid import uuid4
-import os
-import shutil
 
 from app.models.models import ProductRead, ProductUpdate
 from app.dao.product_dao import (
@@ -17,7 +15,6 @@ from app.dao.db import get_db
 from app.dao.purchase_table import PurchaseTable
 from app.dao.user_dao import get_user_by_id
 from app.utils.firebase_auth import verify_firebase_token
-from app.utils.gcs import upload_image_to_gcs  # 追加
 
 router = APIRouter(prefix="/products", tags=["Products"])
 
@@ -40,8 +37,7 @@ async def add_product(
     price: int = Form(...),
     category: str = Form(...),
     description: str = Form(""),
-    image: UploadFile = File(None),
-    imageUrl: str = Form(""),
+    image_url: str = Form(...),  # ← フロントから署名付きURLを受け取る
     user_hint: str = Form(""),
     db: Session = Depends(get_db),
     authorization: str = Header(...)
@@ -56,22 +52,14 @@ async def add_product(
     if not user:
         raise HTTPException(status_code=404, detail="ユーザーが見つかりません")
 
-    # 画像ファイルがあればGCSにアップロードし、そのURLをimage_urlに
-    image_url = imageUrl
-    if image:
-        ext = os.path.splitext(image.filename)[1]
-        img_id = str(uuid4())
-        filename = f"products/{img_id}{ext}"
-        image_url = upload_image_to_gcs(image.file, filename)  # GCSアップロード
-
-    # DB保存
+    # DB保存（image_url はフロントから受け取る）
     from app.models.models import ProductCreate
     product_data = {
         "name": name,
         "price": price,
         "category": category,
         "description": description,
-        "image_url": image_url,
+        "image_url": image_url,  # ← フロントが GCS にアップロード後の read_url
         "user_hint": user_hint,
         "seller_id": user_id,
         "seller_name": user.name,
