@@ -5,7 +5,7 @@ from datetime import timedelta
 def upload_image_to_gcs(file_obj, filename, bucket_name="uttc", url_ttl_days=7):
     credentials, project = google.auth.default()
 
-    client = storage.Client(project=project)
+    client = storage.Client(credentials=credentials, project=project)
     bucket = client.bucket(bucket_name)
     blob = bucket.blob(filename)
 
@@ -15,10 +15,12 @@ def upload_image_to_gcs(file_obj, filename, bucket_name="uttc", url_ttl_days=7):
     if not signing_sa:
         raise RuntimeError("service_account_email が取得できません")
 
+    # ← credentials を明示的に渡す
     url = blob.generate_signed_url(
         version="v4",
         expiration=timedelta(days=url_ttl_days),
         method="GET",
-        service_account_email=signing_sa,  # ← IAM署名
+        credentials=credentials,  # ← これが必須
+        service_account_email=signing_sa,
     )
     return url
