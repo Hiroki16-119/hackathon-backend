@@ -37,7 +37,7 @@ async def add_product(
     price: int = Form(...),
     category: str = Form(...),
     description: str = Form(""),
-    image_url: str = Form(...),  # ← フロントから署名付きURLを受け取る
+    image_url: str = Form(""),  # ← 必須から任意に変更
     user_hint: str = Form(""),
     db: Session = Depends(get_db),
     authorization: str = Header(...)
