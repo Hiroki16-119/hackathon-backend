@@ -7,7 +7,7 @@ pymysql>=1.0.2
 python-dotenv>=1.0.0
 cryptography
 firebase-admin
-torch
+##torch
 joblib
 numpy
 python-multipart
