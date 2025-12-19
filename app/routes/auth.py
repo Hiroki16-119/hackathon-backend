@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from app.dao.db import get_db
 from app.dao.user_dao import get_user_by_email, create_user, get_user_by_id
 
-router = APIRouter(tags=["Auth"])
+router = APIRouter()
 
 class LoginRequest(BaseModel):
     email: str

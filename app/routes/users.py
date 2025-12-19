@@ -9,7 +9,7 @@ from app.dao.purchase_table import PurchaseTable
 from app.models.models import UserRead, UserUpdate, ProductRead
 from app.utils.firebase_auth import verify_firebase_token
 
-router = APIRouter(prefix="/users", tags=["Users"])
+router = APIRouter()
 
 @router.get("/{user_id}", response_model=UserRead)
 def get_user(user_id: str, db: Session = Depends(get_db)):

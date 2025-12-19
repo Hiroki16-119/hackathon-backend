@@ -16,7 +16,7 @@ from app.dao.purchase_table import PurchaseTable
 from app.dao.user_dao import get_user_by_id
 from app.utils.firebase_auth import verify_firebase_token
 
-router = APIRouter(prefix="/products", tags=["Products"])
+router = APIRouter()  # ← prefix なし
 
 
 @router.get("", response_model=List[ProductRead])
