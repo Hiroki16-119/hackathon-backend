@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from typing import Optional
 from app.utils.openai_client import generate_description_text
 
-router = APIRouter(prefix="/generate_description", tags=["AI Description"])
+router = APIRouter()
 
 class GenerateRequest(BaseModel):
     name: str
