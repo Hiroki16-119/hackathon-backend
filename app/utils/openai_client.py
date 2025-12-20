@@ -33,7 +33,8 @@ def predict_category_with_openai(product_name: str):
     system_prompt = (
         "あなたはフリマアプリのカテゴリー分類の専門家です。\n"
         "商品名から最も適切なカテゴリーを1つ選んでください。\n"
-        "カテゴリーは10文字以内で答えてください。\n\n"
+        "**「その他」は絶対に使用しないでください。**\n"
+        "必ず具体的なカテゴリー名を10文字以内で答えてください。\n\n"
         "【回答例】\n"
         "iPhone 13 Pro → 家電\n"
         "ユニクロ セーター → ファッション\n"
@@ -43,9 +44,13 @@ def predict_category_with_openai(product_name: str):
         "ソファ 3人掛け → 家具\n"
         "リップ シャネル → コスメ\n"
         "プロテイン → 食品\n"
-        "ベビーカー → ベビー用品\n\n"
+        "ベビーカー → ベビー用品\n"
+        "革靴 ビジネス → 靴\n"
+        "腕時計 メンズ → アクセサリー\n"
+        "ぬいぐるみ → おもちゃ\n"
+        "観葉植物 → インテリア\n\n"
+        "**重要：必ず具体的なカテゴリー名を返してください。「その他」「不明」「未分類」などは使用禁止です。**\n"
         "カテゴリー名のみを返してください。説明は不要です。"
-        "具体例にないカテゴリー名を使ってもいいので、その他と返すことはせずに、何らかのカテゴリーを返してください"
     )
 
     prompt = f"商品名: {product_name}"
@@ -56,7 +61,13 @@ def predict_category_with_openai(product_name: str):
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": prompt},
         ],
-        temperature=0.2,  # さらに低くして一貫性向上
+        temperature=0.1,  # さらに低くして一貫性を最大化
     )
 
-    return response.choices[0].message.content.strip()
+    category = response.choices[0].message.content.strip()
+    
+    # 保険：「その他」が返ってきたら「雑貨」に変換
+    if category in ["その他", "不明", "未分類", "その他雑貨"]:
+        return "雑貨"
+    
+    return category
