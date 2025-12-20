@@ -4,7 +4,7 @@ load_dotenv()
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from app.routes import products, openai_description, users, auth, predict, images
+from app.routes import products, openai_description, users, auth, predict, images, category_predict , price_predict
 
 app = FastAPI()
 
@@ -32,6 +32,8 @@ app.include_router(users.router, prefix="/users", tags=["users"])
 app.include_router(openai_description.router, prefix="/generate_description", tags=["AI Description"]) 
 app.include_router(auth.router, prefix="/auth", tags=["auth"])  
 app.include_router(predict.router)  
+app.include_router(category_predict.router, prefix="/category", tags=["category"])
+app.include_router(price_predict.router, prefix="/price", tags=["price"]) 
 
 @app.get("/")
 def root():
