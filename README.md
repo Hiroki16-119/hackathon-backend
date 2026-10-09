@@ -93,14 +93,7 @@ docker compose up --build
 > Firebase / Google Cloud を使う機能では、サービスアカウントJSONを用意し、
 > `GOOGLE_APPLICATION_CREDENTIALS` にそのパスを指定してください（JSONはリポジトリにコミットしないこと）。
 
-## スクリーンショット
-<!-- TODO: アプリの画面キャプチャを docs/screenshots/ に置いて、下のリンクを差し替えてください -->
 
-| 画面 | キャプチャ |
-|---|---|
-| 出品・価格予測 | <!-- ![価格予測](docs/screenshots/price_predict.png) --> _（スクリーンショットを追加）_ |
-| 商品一覧・購入確率 | <!-- ![一覧](docs/screenshots/product_list.png) --> _（スクリーンショットを追加）_ |
-| 説明文の自動生成 | <!-- ![説明文生成](docs/screenshots/description.png) --> _（スクリーンショットを追加）_ |
 
 ## 開発体制
 UTTCハッカソンでの **個人開発**。フロントエンド・バックエンド・機械学習モデルをすべて担当しました。
